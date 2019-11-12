@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+		
+		
+	<!-- 扫描器 -->	
+	<context:property-placeholder location="classpath:cms.properties" />
+	
+	<!-- 扫描包 -->
+	<context:component-scan base-package="com.wangming.controller"></context:component-scan>
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 注解驱动 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!-- 不拦截静态资源 -->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 拦截器 -->
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/toLogin.do"/>
+			<mvc:exclude-mapping path="/login.do"/>
+			<bean class="com.wm.interceptor.MyInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
+	
+	<!--设置校验支持 -->
+	<!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+	 <property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+	</bean> -->
+	
+	<!-- 配置接收文件的解析器 -->
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">   
+        <property name="maxUploadSize" value="104857600"/>   
+        <property name="maxInMemorySize" value="2048"/> 
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean> 
+    
+    <!-- 配置权限的拦截器 -->
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+			配置拦截的资源
+			<mvc:mapping path="/**"/>
+			配置排除的拦截资源
+			<mvc:exclude-mapping path="/html/**"/>
+			<mvc:exclude-mapping path="/resource/**"/>
+			<mvc:exclude-mapping path="/article/show"/>
+			<mvc:exclude-mapping path="/article/comment"/>
+			<mvc:exclude-mapping path="/article/getclist"/>
+			<mvc:exclude-mapping path="/article/addHits"/>
+			<mvc:exclude-mapping path="/pic/**"/>
+			<mvc:exclude-mapping path="/"/>
+			<mvc:exclude-mapping path="/index"/>
+			<mvc:exclude-mapping path="/user/login"/>
+			<mvc:exclude-mapping path="/user/register"/>
+			<mvc:exclude-mapping path="/user/checkExist"/>
+			拦截器的实现类
+			<bean class="com.mmcro.cms.web.AuthIntercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+</beans>
