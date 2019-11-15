@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangming.mapper.ArticleMapper">
+	
+	<resultMap type="article" id="articleMap">
+		<association property="user" column="user_id" select="com.wangming.mapper.UserMapper.getUser"></association>
+		<association property="category" column="category_id" select="com.wangming.mapper.CategoryMapper.getById"></association>
+		<association property="channel" column="channel_id" select="com.wangming.mapper.ChannelMapper.getById"></association>
+	</resultMap>
+	
+	<select id="newList" resultType="article">
+		SELECT id,title FROM cms_article
+			WHERE deleted = 0 AND status = 1
+		ORDER BY created DESC limit ${value}
+	</select>
+	
+	<select id="hotList" resultMap="articleMap">
+		SELECT 
+			id,title,channel_id,category_id,user_id,hits,created,commentCnt
+		FROM cms_article WHERE deleted = 0 AND status = 1 AND hot = 1
+	</select>
+	
+	<select id="getArticleList" resultMap="articleMap">
+		SELECT * FROM cms_article WHERE id = ${value}
+			AND deleted = 0 AND status = 1;
+	</select>
+	
+	<select id="getCategoryId" resultMap="articleMap">
+		SELECT 
+			id,title,channel_id,category_id,user_id,hits,created,commentCnt
+		FROM cms_article WHERE deleted = 0 AND status = 1 AND channel_id = #{channelId}
+		<if test="categoryId != 0">
+			AND category_id = ${categoryId}
+		</if>
+		ORDER BY created DESC
+	</select>
+</mapper>

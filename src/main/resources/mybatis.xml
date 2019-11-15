@@ -9,7 +9,7 @@
 
 	<!-- 起别名 -->
 	<typeAliases>
-		<package name="com.wangming.beans"/>
+		<package name="com.wangming.entity"/>
 	</typeAliases>
 	
 	<plugins>
