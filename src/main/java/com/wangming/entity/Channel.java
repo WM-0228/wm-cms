@@ -141,6 +141,17 @@ public class Channel implements Serializable{
 			return false;
 		return true;
 	}
+	/* (non Javadoc) 
+	 * @Title: toString
+	 * @Description: TODO
+	 * @return 
+	 * @see java.lang.Object#toString() 
+	 */
+	@Override
+	public String toString() {
+		return "Channel [id=" + id + ", name=" + name + ", description="
+				+ description + ", icon=" + icon + "]";
+	}
 	
 
 	

@@ -32,5 +32,6 @@ public class ConstantClass {
 	 */
 	public static final int PAGE_SIZE = 3;
 	
-	
+
+	public static final String USER_KEY="SESSION_USER_KEY";
 }

@@ -30,7 +30,7 @@
                     <li><a href="#">用户设置</a></li>
                     <li><a href="#">个人信息</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">退出</a></li>
+                    <li><a href="/user/exit?flag=adminIndex">退出</a></li>
                 </ul>
             </li>
         </ul>
@@ -41,7 +41,7 @@
 	<div class="col-md-2">
 		<div style="margin-left:20px ">
 			<ul class="nav nav-pills nav-stacked">
-			  <li class="active"><a href="javascript:showFuction('/admin/articles')">文章列表</a></li>
+			  <li class="active"><a href="javascript:showFuction('/admin/articles')" data="/admin/articles" id="userUrl">文章列表</a></li>
 			  <li><a href="javascript:showFuction('/user/hello')">测试</a></li>
 			  <li><a href="#">发布文章</a></li>
 			  <li>投票管理
@@ -69,6 +69,7 @@ role="navigation">
 </nav>
 
 <script type="text/javascript">
+	$("#content").load($("#userUrl").attr("data"));
 	function showFuction(url){
 		$("#content").load(url)
 	}

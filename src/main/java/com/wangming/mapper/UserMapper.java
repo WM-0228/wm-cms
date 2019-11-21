@@ -17,6 +17,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.wangming.entity.Article;
+import com.wangming.entity.Category;
 import com.wangming.entity.User;
 
 
@@ -68,8 +70,68 @@ public interface UserMapper {
 	 * @return
 	 * @return: User
 	 */
-	@Select("SELECT * FROM cms_user WHERE username = #{value}")
+	@Select("SELECT * FROM cms_user WHERE username = #{value} limit 1")
 	User findByName(String username);
 
 	int register(User user);
+	/**
+	 * 
+	 * @Title: login 
+	 * @Description: 用户登入
+	 * @param user
+	 * @return
+	 * @return: User
+	 */
+	User login(User user);
+	/**
+	 * 
+	 * @Title: deleteArticle 
+	 * @Description: 删除文章
+	 * @param userId
+	 * @return
+	 * @return: int
+	 */
+	int deleteArticle(int aId);
+	
+	/**
+	 * 
+	 * @Title: getChannelId 
+	 * @Description: 根据频道id获取分类集合
+	 * @param channelId
+	 * @return
+	 * @return: List<Category>
+	 */
+	@Select("SELECT * FROM cms_category WHERE channel_id = ${value}")
+	List<Category> getChannelId(Integer channelId);
+	
+	/**
+	 * 
+	 * @Title: addUserArticle 
+	 * @Description: 用戶添加文章
+	 * @param article
+	 * @return
+	 * @return: int
+	 */
+	int addUserArticle(Article article);
+	/**
+	 * 
+	 * @Title: getArticleById 
+	 * @Description: //根据文章id获取文章内容用于回显
+	 * @param articleId
+	 * @return
+	 * @return: Article
+	 */
+	@Select("SELECT * FROM cms_article WHERE id = ${value}")
+	Article getArticleById(Integer articleId);
+	
+	/**
+	 * 
+	 * @Title: addUserArticle 
+	 * @Description: 修改文章
+	 * @param article
+	 * @return
+	 * @return: int
+	 */
+	int updateUserArticle(Article article);
+	
 }

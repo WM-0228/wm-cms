@@ -21,7 +21,6 @@ import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
 import com.wangming.mapper.ArticleMapper;
 import com.wangming.service.ArticleService;
-import com.wangming.test.Common;
 
 /** 
  * @ClassName: ArticleServiceImpl 
@@ -47,13 +46,6 @@ public class ArticleServiceImpl implements ArticleService {
 		return new PageInfo(articleMapper.hotList());
 	}
 
-	/* (non Javadoc) 
-	 * @Title: getArticleList
-	 * @Description: TODO
-	 * @param id
-	 * @return 
-	 * @see com.wangming.service.ArticleService#getArticleList(java.lang.Integer) 
-	 */
 	@Override
 	public Article getArticleList(Integer id) {
 		// TODO Auto-generated method stub
@@ -66,5 +58,40 @@ public class ArticleServiceImpl implements ArticleService {
 		return new PageInfo(articleMapper.getCategoryId(channelId, categoryId));
 	}
 
+	@Override
+	public List<Article> getArticleList() {
+		// TODO Auto-generated method stub
+		return articleMapper.getWritings();
+	}
+
+	@Override
+	public PageInfo getUserById(Integer userId,int pageNum) {
+		PageHelper.startPage(pageNum, 3);
+		return new PageInfo(articleMapper.getUserById(userId));
+	}
+
+	@Override
+	public Article getById(Integer id) {
+		// TODO Auto-generated method stub
+		return articleMapper.getById(id);
+	}
+
+	@Override
+	public PageInfo getArticleList(int status,int pageNum) {
+		PageHelper.startPage(pageNum, ConstantClass.PAGE_SIZE);
+		return new PageInfo(articleMapper.getArticle(status));
+	}
+
+	@Override
+	public Article getDetailArticle(Integer id) {
+		// TODO Auto-generated method stub
+		return articleMapper.getDetailArticle(id);
+	}
+
+	@Override
+	public boolean updateStatus(Integer status, Integer id) {
+		// TODO Auto-generated method stub
+		return articleMapper.updateStatus(status, id) > 0;
+	}
 
 }

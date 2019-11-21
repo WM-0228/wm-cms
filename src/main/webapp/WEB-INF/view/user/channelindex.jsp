@@ -35,7 +35,7 @@
 						<c:forEach items="${info.list }" var="article">
 							<div class="row">
 								<hr>
-								<div class="col-md-2"><img  height="80px" width="80px"  src=""></div>
+								<div class="col-md-2"><img  height="80px" width="80px"  src="/pic/${article.picture}"></div>
 								<div class="col-md-10">
 									<a href="javascript:articleLook(${article.id })">${article.title }</a>
 									<br>

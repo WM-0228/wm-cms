@@ -10,6 +10,7 @@
  */
 package com.wangming.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -46,6 +47,15 @@ public class IndexController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	/**
+	 * 
+	 * @Title: index 
+	 * @Description: 文章列表
+	 * @param m
+	 * @param pageNum
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping(value = {"index","/"})
 	public String index(Model m,@RequestParam(defaultValue="1")int pageNum){
 		//获取所有的频道
@@ -93,5 +103,46 @@ public class IndexController {
 		m.addAttribute("categoryId", categoryId);
 		
 		return "/user/channelindex";
+	}
+	
+	/**
+	 * 
+	 * @Title: chapter 
+	 * @Description: 上一篇下一篇
+	 * @param value
+	 * @param aid
+	 * @param m
+	 * @return
+	 * @return: String
+	 */
+	@RequestMapping("chapter")
+	public String chapter(String value,Integer aid,Model m){
+		List<Article> articleList = articleService.getArticleList();
+		List<Article> list2 = new ArrayList<Article>();
+			int i = 0;
+			int j = 0;
+			for (Article article : articleList) {
+				if(value.equals("next")){
+					i++;
+					if(article.getId() == aid){
+						j = i + 1;
+					}
+					list2.add(article);
+					if(i == j){
+						break;
+					}
+				}else if(value.equals("pre")){
+					if(article.getId() == aid){
+						break;
+					}
+					list2.add(article);
+				}
+			}
+			if(list2.size() == 0){
+				m.addAttribute("article",articleService.getArticleList(aid));
+			}else{
+				m.addAttribute("article",list2.get(list2.size()-1));
+			}
+		return "/article/articleDetail";
 	}
 }

@@ -24,49 +24,10 @@
 </style>
  <title>有花堪折直须折</title>
 </head>
+<!-- style="background: url(/resource/images/index.jpg) ; background-size:100% 100% ; background-attachment: fixed" -->
 <body>
 <!-- 导航条 -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-  	
-  	<!-- logo -->
-  	<div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        <img alt="Brand" src="/resource/images/logo.png">
-      </a>
-    </div>
-    
-    <!-- 搜索框和右侧登录信息 -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        
-      </ul>
-      
-      <form class="navbar-form navbar-left" >
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-      
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><img width="40px" height="40px" src="/resource/images/donghua.gif"/> </a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          		张三 <span class="caret"></span></a>
-          <ul class="dropdown-menu ">
-            <li><a href="#">个人中心</a></li>
-            <li><a href="#">个人设置</a></li>
-            <li><a href="#">修改头像</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">退出登录</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-    
-  </div>
-</nav>
+	<jsp:include page="common/top.jsp"></jsp:include>
 
 <div class="container-fluid" id="content">
 	<div class="container" style="minheight:200px" >
@@ -119,11 +80,11 @@
 						</a>
 					</div>
 					<!-- 放文章的列表 -->
-					<div class="container">
+					<div class="container" >
 						<c:forEach items="${info.list }" var="article">
 							<div class="row">
-								<hr>
-								<div class="col-md-2"><img  height="80px" width="80px"  src=""></div>
+								<hr style="width: 700px;margin-left: 200px;color: black">
+								<div class="col-md-2"><img  height="80px" width="80px"  src="/pic/${article.picture}" onerror="this.src='/resource/images/z2.jpg'"></div>
 								<div class="col-md-10">
 									<a href="javascript:articleLook(${article.id })">${article.title }</a>
 									<br>
@@ -198,6 +159,7 @@
 <!-- 底部 -->
 <nav class="navbar navbar-default">
   <div class="container-fluid">
+  
   </div>
 </nav>
 

@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangming.common.ConstantClass;
+import com.wangming.common.Md5;
+import com.wangming.entity.Article;
+import com.wangming.entity.Category;
 import com.wangming.entity.User;
 import com.wangming.mapper.UserMapper;
 import com.wangming.service.UserService;
@@ -74,8 +77,84 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	public int register(User user) {
-		// TODO Auto-generated method stub
+		//加盐
+		user.setPassword(Md5.password(user.getPassword(),user.getUsername().substring(0,2)));
 		return userMapper.register(user);
+	}
+
+	/* (non Javadoc) 
+	 * @Title: login
+	 * @Description: TODO
+	 * @param user
+	 * @return 
+	 * @see com.wangming.service.UserService#login(com.wangming.entity.User) 
+	 */
+	@Override
+	public User login(User user) {
+		
+		User findByName = userMapper.findByName(user.getUsername());
+		if(findByName == null){
+			return null;
+		}
+		String password = Md5.password(user.getPassword(),user.getUsername().substring(0, 2));
+		user.setPassword(password);
+		if(password.equals(findByName.getPassword())){
+			return userMapper.login(user); 
+		}else{
+			return null;
+		}
+	}
+
+	/* (non Javadoc) 
+	 * @Title: deleteArticle
+	 * @Description: TODO
+	 * @param aId
+	 * @return 
+	 * @see com.wangming.service.UserService#deleteArticle(int) 
+	 */
+	@Override
+	public boolean deleteArticle(int aId) {
+		// TODO Auto-generated method stub
+		return userMapper.deleteArticle(aId) > 0;
+	}
+
+	/* (non Javadoc) 
+	 * @Title: getChannelId
+	 * @Description: TODO
+	 * @param channelId
+	 * @return 
+	 * @see com.wangming.service.UserService#getChannelId(java.lang.Integer) 
+	 */
+	@Override
+	public List<Category> getChannelId(Integer channelId) {
+		// TODO Auto-generated method stub
+		return userMapper.getChannelId(channelId);
+	}
+
+	/* (non Javadoc) 
+	 * @Title: addUserArticle
+	 * @Description: TODO
+	 * @param article
+	 * @return 
+	 * @see com.wangming.service.UserService#addUserArticle(com.wangming.entity.Article) 
+	 */
+	@Override
+	public int addUserArticle(Article article) {
+		// TODO Auto-generated method stub
+		return userMapper.addUserArticle(article);
+	}
+
+	/* (non Javadoc) 
+	 * @Title: updateUserArticle
+	 * @Description: TODO
+	 * @param article
+	 * @return 
+	 * @see com.wangming.service.UserService#updateUserArticle(com.wangming.entity.Article) 
+	 */
+	@Override
+	public int updateUserArticle(Article article) {
+		// TODO Auto-generated method stub
+		return userMapper.updateUserArticle(article);
 	}
 
 	

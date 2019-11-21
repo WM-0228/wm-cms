@@ -32,8 +32,8 @@
 		<div>
 			<nav aria-label="...">
 			  <ul class="pager">
-			    <li><a href="#">上一篇</a></li>
-			    <li><a href="#">下一篇</a></li>
+			    <li><a href="/chapter?value=pre&aid=${article.id}">上一篇</a></li>
+			    <li><a href="/chapter?value=next&aid=${article.id}">下一篇</a></li>
 			  </ul>
 			</nav>
 		</div>

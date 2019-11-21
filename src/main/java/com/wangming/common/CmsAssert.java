@@ -22,4 +22,9 @@ public class CmsAssert {
 		if(!express)
 			throw new CmsException(msg);
 	}
+	
+	public static void AssertTrueHtml(boolean express,String msg){
+		if(!express)
+			throw new CmsExceptionHtml(msg);
+	}
 }

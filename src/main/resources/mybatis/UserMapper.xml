@@ -31,4 +31,43 @@
 		       #{gender},0,now(),now(),'',0,#{role}) 
 	</insert>
 	
+	
+	<select id="login" resultType="user">
+		SELECT * FROM cms_user WHERE username = #{username} and password = #{password}
+	</select>
+	
+	<delete id="deleteArticle">
+		<!-- DELETE FROM cms_article where id = ${value} -->
+		UPDATE cms_article SET deleted = 1 where id = ${value}
+	</delete>
+	
+	<insert id="addUserArticle">
+		INSERT INTO cms_article SET 
+			title = #{title},
+			content = #{content},
+			picture = #{picture},
+			channel_id = #{channelId},
+			category_id = #{categoryId},
+			user_id = #{userId},
+			hot = 0,
+			status = 0,
+			deleted = 0,
+			created = now(),
+			updated = now()
+	</insert>
+	
+	<update id="updateUserArticle">
+		UPDATE cms_article SET 
+			title = #{title},
+			content = #{content},
+			picture = #{picture},
+			channel_id = #{channelId},
+			category_id = #{categoryId},
+			hot = 0,
+			status = 0,
+			deleted = 0,
+			created = now(),
+			updated = now()
+		WHERE id = ${id}
+	</update>
 </mapper>

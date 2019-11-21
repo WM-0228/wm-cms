@@ -13,6 +13,8 @@ package com.wangming.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
 
 import com.wangming.entity.Article;
 
@@ -46,7 +48,7 @@ public interface ArticleMapper {
 	/**
 	 * 
 	 * @Title: getArticleList 
-	 * @Description: 获取文章
+	 * @Description: 根据id获取文章
 	 * @param id
 	 * @return
 	 * @return: Article
@@ -55,7 +57,7 @@ public interface ArticleMapper {
 
 	/** 
 	 * @Title: getCategoryId 
-	 * @Description: TODO
+	 * @Description: 获取某一个分类下的某个频道
 	 * @param channelId
 	 * @param categoryId
 	 * @param pageNum
@@ -63,4 +65,58 @@ public interface ArticleMapper {
 	 * @return: List<Article>
 	 */
 	List<Article> getCategoryId(@Param("channelId")int channelId, @Param("categoryId")int categoryId);
+	/**
+	 * 
+	 * @Title: getWritings 
+	 * @Description: 获取所有的文章  用于上一篇下一篇
+	 * @return
+	 * @return: List<Article>
+	 */
+	List<Article> getWritings();
+	
+	/**
+	 * 
+	 * @Title: getUserById 
+	 * @Description: 获取当前用户的所有文章
+	 * @return
+	 * @return: List<Article>
+	 */
+	List<Article> getUserById(Integer userId);
+	/**
+	 * 
+	 * @Title: getByUserId 
+	 * @Description: 根据文章id获取文章对象  看他是否存在  不用判断他是否通过
+	 * @param userId
+	 * @return
+	 * @return: Article
+	 */
+	@Select("SELECT id,title,user_id userId,hot,status from cms_article where id = ${value}")
+	@ResultType(Article.class)
+	Article getById(Integer id);
+	/**
+	 * 
+	 * @Title: getArticleList 
+	 * @Description: 管理员用于文章管理
+	 * @return
+	 * @return: List<Article>
+	 */
+	List<Article> getArticle(int status);
+	/**
+	 * 
+	 * @Title: getDetailArticle 
+	 * @Description: 根据id获取文章,只要是没有被删除  都要查到
+	 * @param id
+	 * @return
+	 * @return: Article
+	 */
+	Article getDetailArticle(Integer id);
+	/**
+	 * 
+	 * @Title: updateStatus 
+	 * @Description: 管理员审核
+	 * @param status
+	 * @return
+	 * @return: int
+	 */
+	int updateStatus(@Param("status")Integer status,@Param("id")Integer id);
 }

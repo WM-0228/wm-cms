@@ -15,6 +15,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.github.pagehelper.PageInfo;
+import com.wangming.entity.Article;
+import com.wangming.entity.Category;
 import com.wangming.entity.User;
 
 /** 
@@ -56,4 +58,52 @@ public interface UserService {
 	 * @return: int
 	 */
 	int register(User user);
+	/**
+	 * 
+	 * @Title: login 
+	 * @Description: 用户登入
+	 * @param user
+	 * @return
+	 * @return: User
+	 */
+	User login(User user);
+	/**
+	 * 
+	 * @Title: deleteArticle 
+	 * @Description: 删除文章
+	 * @param userId
+	 * @return
+	 * @return: boolean
+	 */
+	boolean deleteArticle(int aId);
+	
+	/**
+	 * 
+	 * @Title: getChannelId 
+	 * @Description: 根据频道id获取分类集合
+	 * @param channelId
+	 * @return
+	 * @return: List<Category>
+	 */
+	List<Category> getChannelId(Integer channelId);
+
+	/**
+	 * 
+	 * @Title: addUserArticle 
+	 * @Description: 用戶添加文章
+	 * @param article
+	 * @return
+	 * @return: int
+	 */
+	int addUserArticle(Article article);
+
+	/**
+	 * 
+	 * @Title: addUserArticle 
+	 * @Description: 修改文章
+	 * @param article
+	 * @return
+	 * @return: int
+	 */
+	int updateUserArticle(Article article);
 }

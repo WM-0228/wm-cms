@@ -112,7 +112,7 @@
 				function(data) {
 					if(data.result == 1){
 						alert(data.errorMsg);
-						$("#content").load("/admin/users?pageNum="+pageNum+"&name=${name}");
+						$("#content").load("/admin/users?pageNum=${info.pageNum}&name=${name}");
 					}else{
 						alert(data.errorMsg)
 					}
