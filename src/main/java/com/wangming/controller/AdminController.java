@@ -43,7 +43,13 @@ public class AdminController {
 	
 	@Autowired
 	private ArticleService articleService;
-	
+	/**
+	 * 
+	 * @Title: index 
+	 * @Description: 进入主页面
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("index")
 	public String index(){
 		return "admin/index";
@@ -102,7 +108,16 @@ public class AdminController {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @Title: articles 
+	 * @Description: 管理员文章类型
+	 * @param m
+	 * @param pageNum
+	 * @param status
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("articles")
 	public String articles(Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="-1")int status){
 		PageInfo articleList = articleService.getArticleList(status, pageNum);
@@ -111,6 +126,14 @@ public class AdminController {
 		return "/admin/article/list";
 	}
 	
+	/**
+	 * 
+	 * @Title: detailArticle 
+	 * @Description: 获取文章详情
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
 	@RequestMapping("detailArticle")
 	@ResponseBody
 	public Object detailArticle(Integer id){
@@ -119,15 +142,26 @@ public class AdminController {
 		return new MsgResult(1,"獲取成功",articleList);
 	}
 	
+	/**
+	 * 
+	 * @Title: updateStatus 
+	 * @Description: 修改文章状态
+	 * @param status
+	 * @param id
+	 * @return
+	 * @return: Object
+	 */
 	@RequestMapping("updateStatus")
 	@ResponseBody
 	public Object updateStatus(Integer status,Integer id){
 		//如果该用户已经是此状态就抛出异常
-		
-		/*System.out.println("============================"+status+"========================="+id);
 		Article article = articleService.getById(id);
-		CmsAssert.AssertTrue(article.getStatus() != status,"该用户无需做该操作");
-		CmsAssert.AssertTrue(article.getHot() != (status == 3 ? 1 : status == 4 ? 0 : 1),"该用户无需做该操作");*/
+		
+		if(status == 1 || status == 2){
+			CmsAssert.AssertTrue(article.getStatus() != status,"该用户无需做该操作");
+		}else{
+			CmsAssert.AssertTrue(article.getHot() != (status == 3 ? 1 : status == 4 ? 0 : 1),"该用户无需做该操作");
+		}
 		
 		boolean updateStatus = articleService.updateStatus(status, id);
 		

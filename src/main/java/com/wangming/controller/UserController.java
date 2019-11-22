@@ -145,18 +145,43 @@ public class UserController {
 		return flag.equals("index") ? "redirect:/" : "redirect:/user/login";
 	}
 	
+	/**
+	 * 
+	 * @Title: user_interface 
+	 * @Description: 用户页面
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("user_interface")
 	public String user_interface(){
 		return "/user/user_interface";
 	}
 	
+	/**
+	 * 
+	 * @Title: myArticle 
+	 * @Description: 获取当前用户的所有文章
+	 * @param userId
+	 * @param pageNum
+	 * @param m
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("myArticle")
 	public String myArticle(Integer userId,@RequestParam(defaultValue="1")int pageNum,Model m){
 		PageInfo page = articleService.getUserById(userId,pageNum);
 		m.addAttribute("info", page);
 		return "/user/myArticle";
 	}
-	
+	/**
+	 * 
+	 * @Title: deleteArticle 
+	 * @Description: 删除文章
+	 * @param id
+	 * @param request
+	 * @return
+	 * @return: Object
+	 */
 	@ResponseBody
 	@RequestMapping("deleteArticle")
 	public Object deleteArticle(Integer id,HttpServletRequest request){

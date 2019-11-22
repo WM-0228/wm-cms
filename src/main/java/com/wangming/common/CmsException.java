@@ -12,7 +12,7 @@ package com.wangming.common;
 
 /** 
  * @ClassName: CmsException 
- * @Description: TODO
+ * @Description: 自定义异常类
  * @author:WM 
  * @date: 2019年11月15日 下午6:33:51  
  */

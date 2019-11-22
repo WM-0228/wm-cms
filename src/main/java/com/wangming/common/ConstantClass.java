@@ -12,7 +12,7 @@ package com.wangming.common;
 
 /** 
  * @ClassName: ConstantClass 
- * @Description: TODO
+ * @Description: 常用的常量
  * @author:WM 
  * @date: 2019年11月13日 上午11:23:12  
  */

@@ -14,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.pagehelper.PageInfo;
 import com.wangming.common.CmsAssert;
 import com.wangming.entity.Article;
 import com.wangming.service.ArticleService;
+import com.wangming.service.CommentService;
 
 /** 
  * @ClassName: ArticleController 
@@ -32,6 +35,9 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
+	@Autowired
+	private CommentService commentService;
+	
 	/**
 	 * 
 	 * @Title: lookDetail 
@@ -42,10 +48,13 @@ public class ArticleController {
 	 * @return: String
 	 */
 	@RequestMapping("lookDetail")
-	public String lookDetail(Integer id,Model m){
+	public String lookDetail(Integer id,Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="3")int pageSize,String flag){
 		Article articleList = articleService.getArticleList(id);
 		CmsAssert.AssertTrueHtml(articleList != null,"文章不存在");
 		m.addAttribute("article",articleList);
+		PageInfo commentList = commentService.getCommentList(id, pageNum, pageSize);
+		m.addAttribute("info",commentList);
+		m.addAttribute("flag",flag);
 		return "/article/articleDetail";
 	}
 }

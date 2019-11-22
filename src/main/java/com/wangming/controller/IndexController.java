@@ -13,6 +13,8 @@ package com.wangming.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.pagehelper.PageInfo;
+import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
 import com.wangming.entity.Category;
 import com.wangming.entity.Channel;
+import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.CategoryService;
 import com.wangming.service.ChannelService;
+import com.wangming.service.CommentService;
 
 /** 
  * @ClassName: ChannelController 
@@ -46,6 +51,9 @@ public class IndexController {
 	//种类
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	/**
 	 * 
@@ -116,9 +124,10 @@ public class IndexController {
 	 * @return: String
 	 */
 	@RequestMapping("chapter")
-	public String chapter(String value,Integer aid,Model m){
+	public String chapter(String value,Integer aid,Model m,HttpServletRequest request){
 		List<Article> articleList = articleService.getArticleList();
 		List<Article> list2 = new ArrayList<Article>();
+		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
 			int i = 0;
 			int j = 0;
 			for (Article article : articleList) {
@@ -143,6 +152,8 @@ public class IndexController {
 			}else{
 				m.addAttribute("article",list2.get(list2.size()-1));
 			}
+			PageInfo commentList = commentService.getCommentList(aid, 1, 3);
+			m.addAttribute("info",commentList);
 		return "/article/articleDetail";
 	}
 }

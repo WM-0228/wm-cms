@@ -143,4 +143,6 @@
 				$("#content").load("/admin/articles?pageNum=${info.pageNum}");
 			})
 			
+			
+			
 		</script>

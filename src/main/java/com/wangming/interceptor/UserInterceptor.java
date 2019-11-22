@@ -20,7 +20,7 @@ import com.wangming.entity.User;
 
 /** 
  * @ClassName: UserInterceptor 
- * @Description: TODO
+ * @Description: 自定义拦截器类
  * @author:WM 
  * @date: 2019年11月18日 下午4:04:40  
  */

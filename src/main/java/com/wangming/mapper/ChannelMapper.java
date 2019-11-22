@@ -19,12 +19,19 @@ import com.wangming.entity.Channel;
 
 /** 
  * @ClassName: ChnanelMapper 
- * @Description: TODO
+ * @Description: 频道对象
  * @author:WM 
  * @date: 2019年11月14日 下午1:29:32  
  */
 public interface ChannelMapper {
 
+	/**
+	 * 
+	 * @Title: getChannel 
+	 * @Description: 获取所有的channel对象
+	 * @return
+	 * @return: List<Channel>
+	 */
 	@Select("SELECT * FROM cms_channel ORDER BY id")
 	List<Channel> getChannel();
 }

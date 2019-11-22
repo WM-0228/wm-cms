@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /** 
  * @ClassName: ControllerInterceptor 
- * @Description: TODO
+ * @Description: 拦截controller里的异常
  * @author:WM 
  * @date: 2019年11月19日 下午1:08:17  
  */

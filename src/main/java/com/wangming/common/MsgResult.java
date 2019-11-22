@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 /** 
  * @ClassName: MsgResult 
- * @Description: TODO
+ * @Description: 用来传入数据
  * @author:WM 
  * @date: 2019年11月13日 下午2:13:17  
  */

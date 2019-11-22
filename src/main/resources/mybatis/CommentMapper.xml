@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangming.mapper.CommentMapper">
+	<!-- 用于联合查询  给对象进行赋值 -->
+	<resultMap type="comment" id="commentMap">
+		<association property="user" column="userId" select="com.wangming.mapper.UserMapper.getUser"></association>
+		<association property="article" column="articleId" select="getArticleList"></association>
+	</resultMap>
+	
+	<select id="getCommentList" resultMap="commentMap">
+		SELECT id,articleId,userId,content,created,commentLike
+ 			FROM cms_comment WHERE articleId = ${value}
+		ORDER BY created DESC
+	</select>
+	
+	<insert id="publishComment">
+		INSERT INTO cms_comment SET
+			articleId = #{articleId},
+			userId = #{userId},
+			content = #{content},
+			created = now()
+	</insert>
+	
+	<select id="getArticleList" resultType="article">
+		SELECT commentCnt FROM cms_article WHERE id = ${value}
+			AND deleted = 0 AND status = 1;
+	</select>
+	
+	<update id="commentLike">
+		UPDATE cms_comment SET commentLike = commentLike + 1 WHERE id = ${value};
+	</update>
+</mapper>
