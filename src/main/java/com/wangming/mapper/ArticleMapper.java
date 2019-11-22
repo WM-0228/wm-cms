@@ -119,4 +119,12 @@ public interface ArticleMapper {
 	 * @return: int
 	 */
 	int updateStatus(@Param("status")Integer status,@Param("id")Integer id);
+	/**
+	 * 
+	 * @Title: getImageList 
+	 * @Description: 获取最新图片标题
+	 * @return
+	 * @return: List<Article>
+	 */
+	List<Article> getImageList(int pageNum);
 }

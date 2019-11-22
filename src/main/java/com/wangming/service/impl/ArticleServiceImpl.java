@@ -94,4 +94,10 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleMapper.updateStatus(status, id) > 0;
 	}
 
+	@Override
+	public PageInfo getImageList(int pageNum) {
+		// TODO Auto-generated method stub
+		return new PageInfo(articleMapper.getImageList(pageNum));
+	}
+
 }

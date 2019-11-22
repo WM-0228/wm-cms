@@ -12,6 +12,7 @@ package com.wangming.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 /** 
  * @ClassName: Article 
@@ -56,7 +57,25 @@ public class Article implements Serializable{
 	//评论数量
 	private int commentCnt;
 	//文章类型
-	private int articleType;
+	private ArticleType articleType;
+	
+	//存放文章的所有图片和描述
+	private List<Image> imageList;
+	
+	
+	
+	/**
+	 * @return the imageList
+	 */
+	public List<Image> getImageList() {
+		return imageList;
+	}
+	/**
+	 * @param imageList the imageList to set
+	 */
+	public void setImageList(List<Image> imageList) {
+		this.imageList = imageList;
+	}
 	/**
 	 * @return the id
 	 */
@@ -264,13 +283,13 @@ public class Article implements Serializable{
 	/**
 	 * @return the articleType
 	 */
-	public int getArticleType() {
+	public ArticleType getArticleType() {
 		return articleType;
 	}
 	/**
 	 * @param articleType the articleType to set
 	 */
-	public void setArticleType(int articleType) {
+	public void setArticleType(ArticleType articleType) {
 		this.articleType = articleType;
 	}
 	/* (non Javadoc) 

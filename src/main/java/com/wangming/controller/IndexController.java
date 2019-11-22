@@ -73,6 +73,11 @@ public class IndexController {
 		//获取热门文章
 		PageInfo hotList = articleService.hotList(pageNum);
 		
+		//获取最新的图片
+		PageInfo imageList = articleService.getImageList(5);
+	/*	
+		imageList.getList().forEach(x -> System.out.println("====================="+x));*/
+		m.addAttribute("images", imageList);
 		m.addAttribute("articleList", newList);
 		m.addAttribute("channels",list);
 		m.addAttribute("info", hotList);

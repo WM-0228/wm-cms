@@ -106,4 +106,13 @@ public interface UserService {
 	 * @return: int
 	 */
 	int updateUserArticle(Article article);
+	/**
+	 * 
+	 * @Title: addImage 
+	 * @Description: 添加多张图片的文章
+	 * @param article
+	 * @return
+	 * @return: int
+	 */
+	int addImage(Article article);
 }

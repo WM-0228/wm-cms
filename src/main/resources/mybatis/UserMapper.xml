@@ -70,4 +70,22 @@
 			updated = now()
 		WHERE id = ${id}
 	</update>
+	
+	<insert id="addImage">
+		INSERT INTO cms_article SET
+			title = #{title},
+			content = #{content},
+			picture = #{picture},
+			channel_id = #{channelId},
+			category_id = #{categoryId},
+			user_id = #{userId},
+			hits = #{hits},
+			hot = #{hot},
+			status = 0,
+			deleted = 0,
+			created = now(),
+			updated = now(),
+			commentCnt = #{commentCnt},
+			articleType = #{articleType.ordinal}
+	</insert>
 </mapper>

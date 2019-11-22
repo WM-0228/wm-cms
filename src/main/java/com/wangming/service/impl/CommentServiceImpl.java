@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangming.common.ConstantClass;
+import com.wangming.entity.Collect;
 import com.wangming.entity.Comment;
 import com.wangming.mapper.CommentMapper;
 import com.wangming.service.CommentService;
@@ -50,6 +51,24 @@ public class CommentServiceImpl implements CommentService{
 	public int commentLike(Integer id) {
 		// TODO Auto-generated method stub
 		return commentMapper.commentLike(id);
+	}
+
+	@Override
+	public Collect getUserIdOrArticleId(Integer userId, Integer articleId) {
+		// TODO Auto-generated method stub
+		return commentMapper.getUserIdOrArticleId(userId, articleId);
+	}
+
+	@Override
+	public int collectArticle(Integer userId, Integer articleId, Integer deleted) {
+		// TODO Auto-generated method stub
+		return commentMapper.collectArticle(userId, articleId, deleted);
+	}
+
+	@Override
+	public int cancelCollect(Integer id, Integer deleted) {
+		// TODO Auto-generated method stub
+		return commentMapper.cancelCollect(id, deleted);
 	}
 
 	

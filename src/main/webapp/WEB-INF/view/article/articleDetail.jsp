@@ -15,7 +15,10 @@
 <body>
 	<div class="container" align="center">
 		<h2 style="color: green">
-			${article.title }
+			${article.title }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="javascript:collect(${article.id },${(collect == null || collect.deleted == 0) ? 1 : 0 })">
+	          <span class="glyphicon glyphicon-star-empty" style="font-size: 18px;">${(collect == null || collect.deleted == 0) ? '收藏' : '取消收藏' }</span>
+	        </a>
 		</h2>
 		<h4 style="margin-left: 80px;color: pink">
 			作者:${article.user.username}<br>
@@ -66,7 +69,7 @@
 				        	回复
 				        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				         <a href="javascript:commentLike(${comment.id })">
-				          <font class="glyphicon glyphicon-thumbs-up">点赞${comment.commentLike }</font>
+				          <font class="glyphicon glyphicon-thumbs-up">点赞&nbsp;${comment.commentLike }</font>
 				        </a>
 					</div>
 				</div>
@@ -92,7 +95,7 @@
 				var month = date.getMonth();
 				var day = date.getDate();
 				var time = year+"-"+(month+1)+"-"+day;
-				alert(time)
+				/* alert(time) */
 			})
 			
 			//发表评论
@@ -147,6 +150,22 @@
 							location.reload();							
 						}else{
 							alert("点赞失败");
+						}
+					},
+					"json"
+				);
+			}
+			
+			function collect(articleId,deleted){
+				$.post(
+					"<%=request.getContextPath()%>/comment/collect",
+					{articleId:articleId,deleted:deleted},
+					function(obj){
+						if(obj.result == 1){
+							alert(obj.errorMsg);
+							location.reload(true);
+						}else{
+							alert(obj.errorMsg);
 						}
 					},
 					"json"

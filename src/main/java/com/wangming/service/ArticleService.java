@@ -117,4 +117,12 @@ public interface ArticleService {
 	 * @return: int
 	 */
 	boolean updateStatus(Integer status,Integer id);
+	/**
+	 * 
+	 * @Title: getImageList 
+	 * @Description: 获取最新图片标题
+	 * @return
+	 * @return: PageInfo
+	 */
+	PageInfo getImageList(int pageNum);
 }

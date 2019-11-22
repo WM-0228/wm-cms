@@ -10,6 +10,10 @@
  */
 package com.wangming.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.wangming.common.CmsAssert;
+import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
+import com.wangming.entity.ArticleType;
+import com.wangming.entity.Collect;
+import com.wangming.entity.Image;
+import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.CommentService;
 
@@ -48,13 +58,26 @@ public class ArticleController {
 	 * @return: String
 	 */
 	@RequestMapping("lookDetail")
-	public String lookDetail(Integer id,Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="3")int pageSize,String flag){
+	public String lookDetail(Integer id,Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="3")int pageSize,HttpServletRequest request){
 		Article articleList = articleService.getArticleList(id);
 		CmsAssert.AssertTrueHtml(articleList != null,"文章不存在");
 		m.addAttribute("article",articleList);
 		PageInfo commentList = commentService.getCommentList(id, pageNum, pageSize);
 		m.addAttribute("info",commentList);
-		m.addAttribute("flag",flag);
-		return "/article/articleDetail";
+		
+		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
+		Collect collect = commentService.getUserIdOrArticleId((user == null ? null : user.getId()), id);
+		m.addAttribute("collect", collect);
+		
+		if(articleList.getArticleType() == ArticleType.HTML){
+			return "/article/articleDetail";
+		}else{
+			Gson gson = new Gson();
+			List<Image> listImg = gson.fromJson(articleList.getContent(), List.class);
+			articleList.setImageList(listImg);
+			return "/article/articleDetailImage";
+		}
+		
+		
 	}
 }

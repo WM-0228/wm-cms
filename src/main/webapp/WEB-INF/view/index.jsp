@@ -127,18 +127,17 @@
 				</div>
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h3 class="panel-title">面板标题</h3>
+						<h3 class="panel-title">图片文章</h3>
 					</div>
 					<div class="panel-body">
-						这是一个基本的面板
-					</div>
-					<div class="panel-body">
-						这是一个基本的面板
+						<c:forEach items="${images.list }" var="article" varStatus="index">
+							${index.count } . <a href="javascript:articleLook(${article.id })">${article.title }</a><br>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title">面板标题</h3>
+						<h3 class="panel-title">最新文章</h3>
 					</div>
 					<div class="panel-body">
 						<c:forEach items="${articleList }" var="article" varStatus="index">

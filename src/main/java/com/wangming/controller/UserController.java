@@ -13,6 +13,7 @@ package com.wangming.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +34,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.wangming.common.CmsAssert;
 import com.wangming.common.ConstantClass;
 import com.wangming.common.MsgResult;
 import com.wangming.entity.Article;
+import com.wangming.entity.ArticleType;
 import com.wangming.entity.Category;
 import com.wangming.entity.Channel;
+import com.wangming.entity.Image;
 import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.ChannelService;
@@ -317,7 +323,7 @@ public class UserController {
 		String fileName = UUID.randomUUID().toString();
 		
 		//拼接新的文件名称
-		String newFileName = suffix + fileName;
+		String newFileName = fileName + suffix;
 		//获取当前日期当做新的文件夹名称
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String newFolder = sdf.format(new Date());
@@ -344,6 +350,48 @@ public class UserController {
 		request.setAttribute("content1",detailArticle.getContent());
 		return "/article/userUpdate";
 	}
+	
+	
+	@GetMapping("publishImg")
+	public String publishImg(Model m){
+		List<Channel> channelList = channelService.getList();
+		m.addAttribute("channels",channelList);
+		return "/article/publishImg";
+	}
+	
+	
+	@PostMapping("publishImg")
+	@ResponseBody
+	public MsgResult publishImg(Article article,MultipartFile file[],HttpServletRequest request,String desc[]) throws Exception{
+		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
+		List<Image> list = new ArrayList<Image>();
+		for (int i = 0; i < desc.length && i < file.length; i++) {
+			String url = processFile(file[i]);
+			Image image = new Image();
+			image.setDesc(desc[i]);
+			image.setUrl(url);
+			list.add(image);
+		}
+		
+		//获取gson对象
+		Gson gson = new Gson();
+		
+		article.setUserId(user.getId());
+		//将数据转换成json类型存入数据库
+		article.setContent(gson.toJson(list));
+		//设置类型为image
+		article.setArticleType(ArticleType.IMG);
+		
+		int addImage = userService.addImage(article);
+		
+		if(addImage > 0){
+			return new MsgResult(1,"发布成功",null);
+		}else{
+			return new MsgResult(2,"发布失败",null);
+		}
+	}
+	
+	
 	
 	
 }

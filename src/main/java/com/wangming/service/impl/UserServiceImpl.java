@@ -157,5 +157,18 @@ public class UserServiceImpl implements UserService{
 		return userMapper.updateUserArticle(article);
 	}
 
+	/* (non Javadoc) 
+	 * @Title: addImage
+	 * @Description: TODO
+	 * @param article
+	 * @return 
+	 * @see com.wangming.service.UserService#addImage(com.wangming.entity.Article) 
+	 */
+	@Override
+	public int addImage(Article article) {
+		// TODO Auto-generated method stub
+		return userMapper.addImage(article);
+	}
+
 	
 }

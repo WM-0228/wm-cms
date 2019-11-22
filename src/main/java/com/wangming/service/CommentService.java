@@ -12,7 +12,13 @@ package com.wangming.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
 import com.github.pagehelper.PageInfo;
+import com.wangming.entity.Collect;
 import com.wangming.entity.Comment;
 
 /** 
@@ -50,4 +56,35 @@ public interface CommentService {
 	 * @return: int
 	 */
 	int commentLike(Integer id);
+	/**
+	 * 
+	 * @Title: getUserIdOrArticleId 
+	 * @Description: 根据用户id和文章id查询  判断用户是否已经收藏或是取消收藏
+	 * @return
+	 * @return: Collect
+	 */
+	Collect getUserIdOrArticleId(@Param("userId")Integer userId,@Param("articleId")Integer articleId);
+	
+	/**
+	 * 
+	 * @Title: collectArticle 
+	 * @Description: 添加收藏
+	 * @param userId
+	 * @param articleId
+	 * @param deleted
+	 * @return
+	 * @return: int
+	 */
+	int collectArticle(Integer userId,Integer articleId,Integer deleted);
+	
+	/**
+	 * 
+	 * @Title: cancelCollect 
+	 * @Description: 取消收藏
+	 * @param id
+	 * @param deleted
+	 * @return
+	 * @return: int
+	 */
+	int cancelCollect(Integer id,Integer deleted);
 }

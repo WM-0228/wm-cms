@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangming.common.CmsAssert;
 import com.wangming.common.ConstantClass;
 import com.wangming.common.MsgResult;
+import com.wangming.entity.Collect;
 import com.wangming.entity.Comment;
 import com.wangming.entity.User;
 import com.wangming.service.CommentService;
@@ -87,6 +88,43 @@ public class CommentController {
 			return new MsgResult(1,"发表成功",null);
 		}else{
 			return new MsgResult(2,"发表失败",null);
+		}
+	}
+	
+	
+	@RequestMapping("collect")
+	@ResponseBody
+	public MsgResult collect(Integer articleId,HttpServletRequest request,Integer deleted){
+		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
+		CmsAssert.AssertTrue(user != null,"你还没有去登入请先登入");
+		Collect collect = commentService.getUserIdOrArticleId((user == null ? null : user.getId()), articleId);
+		if(deleted == 1){
+			if(collect != null){
+				CmsAssert.AssertTrue(collect.getDeleted() != 1,"您已经收藏");
+			}
+			if(collect == null){
+				int collectArticle = commentService.collectArticle(user.getId(), articleId, deleted);
+				if(collectArticle > 0){
+					return new MsgResult(1,"收藏成功",null);
+				}else{
+					return new MsgResult(2,"收藏失败",null);
+				}
+			}else{
+				int cancelCollect = commentService.cancelCollect(collect.getId(), deleted);
+				if(cancelCollect > 0){
+					return new MsgResult(1,"收藏成功",null);
+				}else{
+					return new MsgResult(2,"收藏失败",null);
+				}
+			}
+		}else{
+			CmsAssert.AssertTrue(collect.getDeleted() != 0,"您还没有收藏");
+			int cancelCollect = commentService.cancelCollect(collect.getId(), deleted);
+				if(cancelCollect > 0){
+					return new MsgResult(1,"取消成功",null);
+				}else{
+					return new MsgResult(2,"取消失败",null);
+				}
 		}
 	}
 	

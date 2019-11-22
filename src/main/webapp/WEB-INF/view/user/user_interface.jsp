@@ -30,6 +30,7 @@
 				<ul class="list-group user">
 				  <li class="list-group-item list-group-item-danger" data="/user/myArticle?userId=${sessionScope.SESSION_USER_KEY.id}">我的文章</li>
 				  <li class="list-group-item list-group-item-warning" data="/user/publish">发布文章</li>
+				  <li class="list-group-item list-group-item-warning" data="/user/publishImg">发布图片</li>
 				  <li class="list-group-item list-group-item-warning">我的评论</li>
 				  <li class="list-group-item list-group-item-warning">投票管理</li>
 				  <li class="list-group-item list-group-item-warning">个人设置</li>

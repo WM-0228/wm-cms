@@ -38,7 +38,8 @@
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 		          		${sessionScope.SESSION_USER_KEY.username } <span class="caret"></span></a>
 		          <ul class="dropdown-menu ">
-		            <li><a href="#">个人中心</a></li>
+		            <li><a href="/user/user_interface">个人中心</a></li>
+		            <li><a href="/">首页面</a></li>
 		            <li><a href="#">个人设置</a></li>
 		            <li><a href="#">修改头像</a></li>
 		            <li role="separator" class="divider"></li>
