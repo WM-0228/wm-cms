@@ -19,7 +19,7 @@
 		<!-- 轮播（Carousel）指标 -->
 		<ol class="carousel-indicators">
 			<c:forEach items="${article.imageList }" var="image" varStatus="index">
-				<li data-target="#myCarousel" data-slide-to="0" class="${insex.index == 0 ? 'active' : null }"></li>
+				<li data-target="#myCarousel" data-slide-to="0" class="${index.index == 0 ? 'active' : null }"></li>
 			</c:forEach>
 		</ol>   
 		<!-- 轮播（Carousel）项目 -->

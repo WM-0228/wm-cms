@@ -158,7 +158,9 @@
 <!-- 底部 -->
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-  
+  	<c:forEach items="${links.list }" var="link">
+  		<div class="col-md-1"><a href="javascript:link('${link.url}')" class="fl"> ${link.name}</a></div>
+  	</c:forEach>
   </div>
 </nav>
 
@@ -174,6 +176,10 @@
 				$("#content").load($(this).attr("data"));
 			})
 		})
+		
+		function link(url){
+			window.open(url);	
+		}
 	</script>
 </body>
 </html>

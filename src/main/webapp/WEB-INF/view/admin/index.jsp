@@ -44,6 +44,7 @@
 			  <li class="active"><a href="javascript:showFuction('/admin/articles')" data="/admin/articles" id="userUrl">文章列表</a></li>
 			  <li><a href="javascript:showFuction('/user/hello')">测试</a></li>
 			  <li><a href="#">发布文章</a></li>
+			  <li><a href="javascript:showFuction('/link/link')">友情链接</a></li>
 			  <li>投票管理
 			  	<ul class="nav nav-pills nav-stacked">
 			  		<li><a href="#">投票列表</a></li>

@@ -27,11 +27,13 @@ import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
 import com.wangming.entity.Category;
 import com.wangming.entity.Channel;
+import com.wangming.entity.Link;
 import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.CategoryService;
 import com.wangming.service.ChannelService;
 import com.wangming.service.CommentService;
+import com.wangming.service.LinkService;
 
 /** 
  * @ClassName: ChannelController 
@@ -51,9 +53,14 @@ public class IndexController {
 	//种类
 	@Autowired
 	private CategoryService categoryService;
-	
+	//评论
 	@Autowired
 	private CommentService commentService;
+	//友情链接
+	@Autowired
+	private LinkService linkService;
+	
+	
 	
 	/**
 	 * 
@@ -75,12 +82,16 @@ public class IndexController {
 		
 		//获取最新的图片
 		PageInfo imageList = articleService.getImageList(5);
-	/*	
-		imageList.getList().forEach(x -> System.out.println("====================="+x));*/
+		
+		PageInfo<Link> linkList = linkService.getLinkList(1);
+		
+		
+		/*imageList.getList().forEach(x -> System.out.println("====================="+x));*/
 		m.addAttribute("images", imageList);
 		m.addAttribute("articleList", newList);
 		m.addAttribute("channels",list);
 		m.addAttribute("info", hotList);
+		m.addAttribute("links", linkList);
 		return "index";
 	}
 	
