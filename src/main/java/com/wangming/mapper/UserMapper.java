@@ -19,6 +19,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.wangming.entity.Article;
 import com.wangming.entity.Category;
+import com.wangming.entity.Collect;
 import com.wangming.entity.User;
 
 
@@ -142,5 +143,14 @@ public interface UserMapper {
 	 * @return: int
 	 */
 	int addImage(Article article);
+	
+	/**
+	 * 
+	 * @Title: getCollectList 
+	 * @Description: 获取收藏
+	 * @return
+	 * @return: List<Collect>
+	 */
+	List<Collect> getCollectList(Integer userId);
 	
 }

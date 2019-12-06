@@ -21,6 +21,7 @@ import com.wangming.common.ConstantClass;
 import com.wangming.common.Md5;
 import com.wangming.entity.Article;
 import com.wangming.entity.Category;
+import com.wangming.entity.Collect;
 import com.wangming.entity.User;
 import com.wangming.mapper.UserMapper;
 import com.wangming.service.UserService;
@@ -168,6 +169,19 @@ public class UserServiceImpl implements UserService{
 	public int addImage(Article article) {
 		// TODO Auto-generated method stub
 		return userMapper.addImage(article);
+	}
+
+	/* (non Javadoc) 
+	 * @Title: getCollectList
+	 * @Description: TODO
+	 * @param userId
+	 * @return 
+	 * @see com.wangming.service.UserService#getCollectList(java.lang.Integer) 
+	 */
+	@Override
+	public List<Collect> getCollectList(Integer userId) {
+		// TODO Auto-generated method stub
+		return userMapper.getCollectList(userId);
 	}
 
 	

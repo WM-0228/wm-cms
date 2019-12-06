@@ -7,6 +7,10 @@
 		<result property="updateTime" column="update_time"/>
 	</resultMap>
 
+	<resultMap type="collect" id="collectMap">
+		<association property="article" javaType="article" column="articleId" select="getArticleList">
+		</association>
+	</resultMap>
 	<select id="userList" resultMap="userMap">
 		SELECT * FROM cms_user
 			<where>
@@ -88,4 +92,13 @@
 			commentCnt = #{commentCnt},
 			articleType = #{articleType.ordinal}
 	</insert>
+	
+	<select id="getCollectList" resultMap="collectMap">
+		SELECT * FROM cms_collect WHERE userId = #{value}
+	</select>
+	
+	<select id="getArticleList" resultType="article">
+		SELECT id,title FROM cms_article WHERE id = #{articleId}
+			AND deleted = 0 AND status = 1;
+	</select>
 </mapper>

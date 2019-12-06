@@ -13,6 +13,7 @@ package com.wangming.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -33,6 +34,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	private ArticleMapper articleMapper;
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	@Override
 	public List<Article> newList(int i) {
@@ -40,10 +44,19 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleMapper.newList(i);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public PageInfo hotList(int pageNum) {
-		PageHelper.startPage(pageNum,ConstantClass.PAGE_SIZE);
-		return new PageInfo(articleMapper.hotList());
+		/*PageHelper.startPage(pageNum,ConstantClass.PAGE_SIZE);*/
+		List<Article> range = redisTemplate.opsForList().range("ArticleList", 0,9);
+		if(!range.isEmpty() && range.size() > 0){
+			System.err.println("=======================使用redis数据库");
+			return new PageInfo(range);
+		}
+		System.err.println("=======================使用mysql数据库");
+		List<Article> hotList = articleMapper.hotList();
+		redisTemplate.opsForList().rightPushAll("ArticleList", hotList.toArray());
+		return new PageInfo(hotList);
 	}
 
 	@Override

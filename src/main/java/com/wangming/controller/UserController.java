@@ -42,6 +42,7 @@ import com.wangming.entity.Article;
 import com.wangming.entity.ArticleType;
 import com.wangming.entity.Category;
 import com.wangming.entity.Channel;
+import com.wangming.entity.Collect;
 import com.wangming.entity.Image;
 import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
@@ -392,6 +393,12 @@ public class UserController {
 	}
 	
 	
-	
+	@RequestMapping("collect")
+	public String collect(HttpServletRequest request){
+		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
+		List<Collect> collectList = userService.getCollectList(user.getId());
+		request.setAttribute("collects",collectList);
+		return "/user/collect";
+	}
 	
 }

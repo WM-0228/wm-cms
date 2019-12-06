@@ -27,12 +27,14 @@ import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
 import com.wangming.entity.Category;
 import com.wangming.entity.Channel;
+import com.wangming.entity.Friendly;
 import com.wangming.entity.Link;
 import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.CategoryService;
 import com.wangming.service.ChannelService;
 import com.wangming.service.CommentService;
+import com.wangming.service.FriendlyService;
 import com.wangming.service.LinkService;
 
 /** 
@@ -56,11 +58,10 @@ public class IndexController {
 	//评论
 	@Autowired
 	private CommentService commentService;
+	
 	//友情链接
 	@Autowired
-	private LinkService linkService;
-	
-	
+	private FriendlyService friendlyService;
 	
 	/**
 	 * 
@@ -83,15 +84,13 @@ public class IndexController {
 		//获取最新的图片
 		PageInfo imageList = articleService.getImageList(5);
 		
-		PageInfo<Link> linkList = linkService.getLinkList(1);
+		List<Friendly> friendlyList = friendlyService.getFriendlyList();
 		
-		
-		/*imageList.getList().forEach(x -> System.out.println("====================="+x));*/
+		m.addAttribute("friendlys", friendlyList);
 		m.addAttribute("images", imageList);
 		m.addAttribute("articleList", newList);
 		m.addAttribute("channels",list);
 		m.addAttribute("info", hotList);
-		m.addAttribute("links", linkList);
 		return "index";
 	}
 	

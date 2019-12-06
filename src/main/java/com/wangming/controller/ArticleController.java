@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,9 +58,10 @@ public class ArticleController {
 	 * @param m
 	 * @return
 	 * @return: String
+	 * @throws ParseException 
 	 */
 	@RequestMapping("lookDetail")
-	public String lookDetail(Integer id,Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="3")int pageSize,HttpServletRequest request){
+	public String lookDetail(Integer id,Model m,@RequestParam(defaultValue="1")int pageNum,@RequestParam(defaultValue="3")int pageSize,HttpServletRequest request) throws ParseException{
 		Article articleList = articleService.getArticleList(id);
 		CmsAssert.AssertTrueHtml(articleList != null,"文章不存在");
 		m.addAttribute("article",articleList);
@@ -73,7 +76,10 @@ public class ArticleController {
 			return "/article/articleDetail";
 		}else{
 			Gson gson = new Gson();
-			List<Image> listImg = gson.fromJson(articleList.getContent(), List.class);
+			/*List<Image> listImg = gson.fromJson(articleList.getContent(), List.class);*/
+			/*JSONObject json = new JSONObject();*/
+			//将字符串转换成json对象
+			List<Image> listImg = (List<Image>) new JSONParser().parse(articleList.getContent());
 			articleList.setImageList(listImg);
 			return "/article/articleDetailImage";
 		}

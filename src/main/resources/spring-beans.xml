@@ -9,7 +9,8 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-
+	<!-- 加载redis的配置wenj -->
+	<import resource="classpath:redis.xml"/>	
 
 	<!-- 1、注解扫描器 -->
 	<!-- todo -->

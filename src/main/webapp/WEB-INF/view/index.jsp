@@ -158,8 +158,8 @@
 <!-- 底部 -->
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-  	<c:forEach items="${links.list }" var="link">
-  		<div class="col-md-1"><a href="javascript:link('${link.url}')" class="fl"> ${link.name}</a></div>
+  	<c:forEach items="${friendlys }" var="friendly">
+  		<a href="javascript:friendlyLock('${friendly.url }')">${friendly.text }</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   	</c:forEach>
   </div>
 </nav>
@@ -171,15 +171,16 @@
 			window.open("/article/lookDetail?id="+articleId);
 		}
 		
+		function friendlyLock(url){
+			window.open(url);
+		}
+		
 		$(function(){
 			$(".menu li").click(function(){
 				$("#content").load($(this).attr("data"));
 			})
 		})
 		
-		function link(url){
-			window.open(url);	
-		}
 	</script>
 </body>
 </html>

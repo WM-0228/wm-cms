@@ -33,6 +33,23 @@ public class Collect implements Serializable{
 	private Date created;
 	//是否删除
 	private int deleted;
+	
+	private Article article;
+	
+	
+	
+	/**
+	 * @return the article
+	 */
+	public Article getArticle() {
+		return article;
+	}
+	/**
+	 * @param article the article to set
+	 */
+	public void setArticle(Article article) {
+		this.article = article;
+	}
 	/**
 	 * @return the id
 	 */
