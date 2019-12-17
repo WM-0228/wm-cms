@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.wangming.common.CmsAssert;
@@ -67,6 +69,9 @@ public class UserController {
 	
 	@Autowired
 	private ChannelService channelService;
+	
+	@Autowired
+	private KafkaTemplate<String,String> kafkaTemplate;
 	
 	//資源文件赋值操作   将文件路径值获取
 	@Value("${upload.path}")
@@ -209,6 +214,7 @@ public class UserController {
 		
 		boolean deleteArticle = userService.deleteArticle(id);
 		if(deleteArticle){
+			kafkaTemplate.send("article","delete="+id);
 			return new MsgResult(1,"删除成功",null);
 		}else{
 			return new MsgResult(0,"删除失败",null);
@@ -270,9 +276,12 @@ public class UserController {
 		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
 		article.setUserId(user.getId());
 		//添加
-		System.out.println("=========================="+article);
 		int addUserArticle = userService.addUserArticle(article);
+		
 		if(addUserArticle > 0){
+			//当用户添加成功后  将向用户存储数据转换成json对象利用kafka生产者将消息发送给消费者
+			String jsonString = JSON.toJSONString(article);
+			kafkaTemplate.send("article","add="+jsonString);
 			return new MsgResult(1,"发布成功",null);
 		}else{
 			return new MsgResult(2,"发布失败",null);
@@ -282,7 +291,7 @@ public class UserController {
 	/**
 	 * 
 	 * @Title: publishArticle 
-	 * @Description: 用户发布文章
+	 * @Description: 用户修改
 	 * @param file
 	 * @param article
 	 * @param request
@@ -300,6 +309,9 @@ public class UserController {
 		//执行修改
 		int updateUserArticle = userService.updateUserArticle(article);
 		if(updateUserArticle > 0){
+			//当用户添加成功后  将向用户存储数据转换成json对象利用kafka生产者将消息发送给消费者
+			String jsonString = JSON.toJSONString(article);
+			kafkaTemplate.send("article","update="+jsonString);
 			return new MsgResult(1,"修改成功",null);
 		}else{
 			return new MsgResult(2,"修改失败",null);

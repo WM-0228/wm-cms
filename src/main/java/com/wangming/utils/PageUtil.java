@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.poi.ss.formula.functions.T;
+
+import com.github.pagehelper.PageInfo;
+
 
 /**
  * 分页工具类
@@ -23,10 +27,9 @@ public final class PageUtil {
 	 * @param listCount 一共有多少条数据
 	 * @param page     当前页码
 	 */
-	public static void page(HttpServletRequest request, String url, Integer pageSize, List<?> list, Integer listCount, Integer pageNum,Class clazz,Object obj) {
+	public static PageInfo page(HttpServletRequest request, String url, Integer pageSize,List<?> list, Integer listCount, Integer pageNum,Class clazz,Object obj) {
 		// 通过符合要求的总条数和页面显示数来计算总页数
 		int pageCount = listCount/pageSize + (listCount%pageSize == 0 ? 0 : 1);
-		
 		String endstring = "";
 		//获取类属性进行路径拼接
 		if(clazz != null && obj != null){
@@ -43,10 +46,22 @@ public final class PageUtil {
 				e.printStackTrace();
 			}
 			endstring = str.substring(0, str.length() - 1);
+			
 		}
+			
+		int prePage = 0;
+		int nextPage = 0;
+		
+		prePage = (pageNum == 1 ? pageNum : pageNum - 1);
+		nextPage = (pageNum == pageCount ? pageNum : pageNum + 1);
 		
 		
-		
+		PageInfo page = new PageInfo(list);
+		page.setPages(pageCount);
+		page.setPrePage(prePage);
+		page.setNextPage(nextPage);
+		page.setTotal(listCount);
+		page.setPageSize(pageSize);
 		
 		//本来想法是写一个flag判断这个循环的对象只要他不为空在进行一个判断但是没有想出来只能等出现新的错误再继续更新
 		
@@ -59,36 +74,21 @@ public final class PageUtil {
 		
 		url += endstring;
 		
-		// 分页的首页、上一页、下一页、末页
-		String first = "";
-		String prev ="";
-		String next = "";
-		String last = "";
 		
-		if(pageNum != 1) {
-			first = "<a href='"+request.getContextPath()+url+flag+"pageNum=1'>首页</a>";
-		} else {
-			first = "首页";
-		}
+		String pages = "";
 		
-		if(pageNum > 1) {
-			prev = "<a href='"+request.getContextPath()+url+flag+"pageNum="+(pageNum-1)+"'>上一页</a>";
-		} else {
-			prev = "上一页";
+		pages += "<ul class='pagination'>";
+		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+prePage+"'>&laquo;</a></li>";
+		for (int i = pageNum - 2  > 1 ? pageNum - 2 : 1; i <= (pageNum + 2 > pageCount ? pageCount : pageNum + 2); i++) {
+			if(pageNum != i){
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+			}else{
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+			}
 		}
+		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+nextPage+"'>&raquo;</a></li></ul>";
 		
-		if(pageNum < pageCount) {
-			next = "<a href='"+request.getContextPath()+url+flag+"pageNum="+(pageNum + 1)+"'>下一页</a>";
-		} else {
-			next = "下一页";
-		}
-		
-		if(pageNum != pageCount) {
-			last = "<a href='"+request.getContextPath()+url+flag+"pageNum="+pageCount+"'>末页</a>";
-		} else {
-			last = "末页";
-		}
-//		request.setAttribute("page", "共有"+listCount+"条数据"+" 当前为第"+pageNum+"页 &nbsp;"+first+" "+prev+" "+next+" "+last);
+		request.setAttribute("page",pages);
+		return page;
 	}
-	
 }

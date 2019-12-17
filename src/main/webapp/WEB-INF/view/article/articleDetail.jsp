@@ -16,9 +16,9 @@
 	<div class="container" align="center">
 		<h2 style="color: green">
 			${article.title }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<%-- <a href="javascript:collect(${article.id },${(collect == null || collect.deleted == 0) ? 1 : 0 })">
+			<a href="javascript:collect(${article.id },${(collect == null || collect.deleted == 0) ? 1 : 0 })">
 	          <span class="glyphicon glyphicon-star-empty" style="font-size: 18px;">${(collect == null || collect.deleted == 0) ? '收藏' : '取消收藏' }</span>
-	        </a> --%>
+	        </a>
 		</h2>
 		<h4 style="margin-left: 80px;color: pink">
 			作者:${article.user.username}<br>

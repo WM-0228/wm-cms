@@ -26,7 +26,7 @@ import com.wangming.entity.Article;
 import com.wangming.entity.User;
 import com.wangming.service.ArticleService;
 import com.wangming.service.UserService;
-import com.wangming.utils.PageUtil;
+import com.wangming.util.PageUtil;
 
 /** 
  * @ClassName: UserController 

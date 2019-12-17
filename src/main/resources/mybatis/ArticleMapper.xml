@@ -39,11 +39,13 @@
 		SELECT * FROM cms_article WHERE id = ${value}
 			AND deleted = 0 AND status = 1;
 	</select>
+	
 	<!-- 获取所有文章对象  用于上一篇下一篇 -->
 	<select id="getWritings" resultMap="articleMap">
 		SELECT * FROM cms_article WHERE
 			deleted = 0 AND status = 1;
 	</select>
+	
 	<!-- 获取否一个类型的小类型 -->
 	<select id="getCategoryId" resultMap="articleMap">
 		SELECT 

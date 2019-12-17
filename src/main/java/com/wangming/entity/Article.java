@@ -11,8 +11,15 @@
 package com.wangming.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /** 
  * @ClassName: Article 
@@ -20,25 +27,38 @@ import java.util.List;
  * @author:WM 
  * @date: 2019年11月14日 下午2:10:15  
  */
+@Document(indexName="cms_article",type="article")
 public class Article implements Serializable{
 
+	private static final long serialVersionUID = -5837179851594261920L;
+	
+	@Id
 	private Integer id;
+	
 	// 标题
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String title;
+	
 	// 文章内容
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String content;
+	
 	// 标题图片地址
 	private String picture;
 	// 频道
 	private Integer channelId;
+	//忽略此实体类
+	@JsonIgnore
 	private Channel channel;
 
 	//文章分類
 	private Integer categoryId;
+	@JsonIgnore
 	private Category category;
 	
 	//用戶
 	private Integer userId;
+	@JsonIgnore
 	private User user;
 	
 	//點擊量
@@ -57,12 +77,11 @@ public class Article implements Serializable{
 	//评论数量
 	private int commentCnt;
 	//文章类型
+	@JsonIgnore
 	private ArticleType articleType;
 	
 	//存放文章的所有图片和描述
 	private List<Image> imageList;
-	
-	
 	
 	/**
 	 * @return the imageList

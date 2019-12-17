@@ -98,7 +98,7 @@
 						</c:forEach>
 					</div>
 					<div align="center">
-						<ul class="pagination">
+						<%-- <ul class="pagination">
 						    <li><a href="/index?pageNum=${info.prePage}">&laquo;</a></li>
 						    <c:forEach begin="${info.pageNum-2 > 1 ? info.pageNum-2:1}" end="${info.pageNum+2 > info.pages ? info.pages:info.pageNum+2}" varStatus="index">    		
 						    	<c:if test="${info.pageNum!=index.index}">
@@ -110,7 +110,8 @@
 						    	
 						    </c:forEach>
 						    <li><a href="/index?pageNum=${info.nextPage}">&raquo;</a></li>
-						</ul>
+						</ul> --%>
+						${page }
 					</div>
 			</div>
 			<!-- 中间的内容结束 -->

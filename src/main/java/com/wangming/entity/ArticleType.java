@@ -17,10 +17,11 @@ package com.wangming.entity;
  * @date: 2019年11月22日 下午3:35:59  
  */
 public enum ArticleType {
-
+	
 	HTML,IMG;
 	
 	public int getOrdinal(){
 		return this.ordinal();
 	}
 }
+

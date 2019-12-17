@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
 import com.wangming.mapper.ArticleMapper;
@@ -46,17 +47,18 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public PageInfo hotList(int pageNum) {
-		/*PageHelper.startPage(pageNum,ConstantClass.PAGE_SIZE);*/
-		List<Article> range = redisTemplate.opsForList().range("ArticleList", 0,9);
+	public PageInfo hotList(int pageNum,int pageSize) {
+		
+		List<Article> range = redisTemplate.opsForList().range("ArticleList", (pageNum - 1) * pageSize,(pageNum - 1) * pageSize + pageSize - 1);
 		if(!range.isEmpty() && range.size() > 0){
-			System.err.println("=======================使用redis数据库");
 			return new PageInfo(range);
+		}else{
+			PageHelper.startPage(pageNum,ConstantClass.PAGE_SIZE);
+			System.err.println("=======================使用mysql数据库");
+			List<Article> hotList = articleMapper.hotList();
+			redisTemplate.opsForList().rightPushAll("ArticleList", hotList.toArray());
+			return new PageInfo(hotList);
 		}
-		System.err.println("=======================使用mysql数据库");
-		List<Article> hotList = articleMapper.hotList();
-		redisTemplate.opsForList().rightPushAll("ArticleList", hotList.toArray());
-		return new PageInfo(hotList);
 	}
 
 	@Override

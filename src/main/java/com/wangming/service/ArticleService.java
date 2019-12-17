@@ -42,7 +42,7 @@ public interface ArticleService {
 	 * @return
 	 * @return: PageInfo
 	 */
-	PageInfo hotList(int pageNum);
+	PageInfo hotList(int pageNum,int pageSize);
 
 	/**
 	 * 

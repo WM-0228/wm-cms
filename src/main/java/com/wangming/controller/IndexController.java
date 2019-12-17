@@ -17,11 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangming.common.ConstantClass;
 import com.wangming.entity.Article;
@@ -30,12 +34,15 @@ import com.wangming.entity.Channel;
 import com.wangming.entity.Friendly;
 import com.wangming.entity.Link;
 import com.wangming.entity.User;
+import com.wangming.mapper.EsRepository;
 import com.wangming.service.ArticleService;
 import com.wangming.service.CategoryService;
 import com.wangming.service.ChannelService;
 import com.wangming.service.CommentService;
 import com.wangming.service.FriendlyService;
 import com.wangming.service.LinkService;
+import com.wangming.utils.HLUtils;
+import com.wangming.utils.PageUtil;
 
 /** 
  * @ClassName: ChannelController 
@@ -63,6 +70,16 @@ public class IndexController {
 	@Autowired
 	private FriendlyService friendlyService;
 	
+	//调用es
+	@Autowired
+	private EsRepository esRepository;
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
+	
+	@Autowired
+	private ElasticsearchTemplate elasticsearchTemplate;
+	
 	/**
 	 * 
 	 * @Title: index 
@@ -73,13 +90,31 @@ public class IndexController {
 	 * @return: String
 	 */
 	@RequestMapping(value = {"index","/"})
-	public String index(Model m,@RequestParam(defaultValue="1")int pageNum){
+	public String index(Model m,@RequestParam(defaultValue="1")int pageNum,String key,HttpServletRequest request){
+		
+		
 		//获取所有的频道
 		List<Channel> list = channelService.getList();
 		//获取最新的标题
 		List<Article> newList = articleService.newList(5);
 		//获取热门文章
-		PageInfo hotList = articleService.hotList(pageNum);
+		PageInfo hotList = null;
+		//根据key有没有只判断用户是否查询
+		if(null != key && key != ""){
+			AggregatedPage<?> selectObjects = HLUtils.selectObjects(elasticsearchTemplate, Article.class,pageNum,
+					3, new String[] { "title" }, "id", key);
+			List<Article> content = (List<Article>) selectObjects.getContent();
+			hotList = PageUtil.page(request,"/?key="+key, 3,content,(int)selectObjects.getTotalElements(), pageNum, null, null);
+			System.err.println("===========================");
+		}else{
+			//没有使用搜索
+			Long size = redisTemplate.opsForList().size("goods_list");
+			int totalPage = (int) (size % 3 == 0 ? size / 3 : (size / 3) + 1);
+			PageInfo page = articleService.hotList(pageNum,3);
+			List list2 = page.getList();
+			
+			hotList = PageUtil.page(request,"/", 3,page.getList(),totalPage, pageNum, null, null);
+		}
 		
 		//获取最新的图片
 		PageInfo imageList = articleService.getImageList(5);
