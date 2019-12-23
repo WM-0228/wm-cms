@@ -153,4 +153,7 @@ public interface UserMapper {
 	 */
 	List<Collect> getCollectList(Integer userId);
 	
+	@Select("SELECT id FROM cms_user")
+	int[] getUserId();
+	
 }

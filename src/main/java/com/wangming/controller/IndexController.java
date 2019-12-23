@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,10 @@ public class IndexController {
 	@Autowired
 	private ElasticsearchTemplate elasticsearchTemplate;
 	
+	//注入spring线程池
+	@Autowired
+	private ThreadPoolTaskExecutor executor;
+	
 	/**
 	 * 
 	 * @Title: index 
@@ -104,7 +109,7 @@ public class IndexController {
 			AggregatedPage<?> selectObjects = HLUtils.selectObjects(elasticsearchTemplate, Article.class,pageNum,
 					3, new String[] { "title" }, "id", key);
 			List<Article> content = (List<Article>) selectObjects.getContent();
-			hotList = PageUtil.page(request,"/?key="+key, 3,content,(int)selectObjects.getTotalElements(), pageNum, null, null);
+			hotList = PageUtil.page(request,"/?key="+key,3,content,(int)selectObjects.getTotalElements(),pageNum, null, null);
 			System.err.println("===========================");
 		}else{
 			//没有使用搜索

@@ -11,12 +11,15 @@
 package com.wangming.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +53,12 @@ public class ArticleController {
 	@Autowired
 	private CommentService commentService;
 	
+	@Autowired
+	private RedisTemplate redisTemplate;
+	
+	@Autowired
+	private ThreadPoolTaskExecutor executor;
+	
 	/**
 	 * 
 	 * @Title: lookDetail 
@@ -70,6 +79,25 @@ public class ArticleController {
 		
 		User user = (User) request.getSession().getAttribute(ConstantClass.USER_KEY);
 		Collect collect = commentService.getUserIdOrArticleId((user == null ? null : user.getId()), id);
+		//练习代码
+		/////////////////////////////////////////////////////////////////////////////////////////////////\
+		//获取用户ip
+		String ip = request.getRemoteAddr();
+		//拼接key
+		String key = "Hits_"+id+"_"+ip;
+		String redisData = (String) redisTemplate.opsForValue().get(key);
+		if(redisData == null){
+			executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					articleList.setId(id);
+					articleList.setHits(articleList.getHits()+1);
+					articleService.test(articleList);
+					redisTemplate.opsForValue().set(key,"",5,TimeUnit.MINUTES);
+				}
+			});
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////
 		m.addAttribute("collect", collect);
 		
 		if(articleList.getArticleType() == ArticleType.HTML){

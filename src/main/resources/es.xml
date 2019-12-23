@@ -16,7 +16,7 @@
 		9300:是对java编程需要操作es所暴露的端口号
 	 -->
 	<elasticsearch:transport-client id="client"
-		cluster-nodes="localhost:9300" /> <!-- spring data elasticSearcheDao 必须继承 ElasticsearchTemplate -->
+		cluster-nodes="10.56.33.101:9300" /> <!-- spring data elasticSearcheDao 必须继承 ElasticsearchTemplate -->
 		
 	<bean id="elasticsearchTemplate"
 		class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">

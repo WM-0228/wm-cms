@@ -19,6 +19,7 @@ import org.springframework.kafka.listener.MessageListener;
 import com.alibaba.fastjson.JSON;
 import com.wangming.entity.Article;
 import com.wangming.mapper.ArticleMapper;
+import com.wangming.mapper.EsRepository;
 import com.wangming.mapper.UserMapper;
 import com.wangming.service.ArticleService;
 import com.wangming.service.UserService;
@@ -37,23 +38,38 @@ public class MsgListener implements MessageListener<String, String>{
 	@Autowired
 	private RedisTemplate redisTemplate;
 	
+	@Autowired
+	private EsRepository esRepository;
+	
 	@Override
 	public void onMessage(ConsumerRecord<String, String> data) {
 		// TODO Auto-generated method stub
 		String value = data.value();
+		String condition = value.split("=")[1];
 		if(value.startsWith("add")){
 			//删除redis数据缓存   让数据从mysql查到后在存入redis
 			//这样就可以将数据同步到redis数据库了
-			System.err.println(value);
 			redisTemplate.delete("ArticleList");
+			//将json字符串转换成article对象
+			Article article = JSON.parseObject(condition, Article.class);
+			//添加到es索引库
+			/*System.err.println("================="+article.getId());*/
+			esRepository.save(article);
 		}else if(value.startsWith("update")){
-			System.err.println(value);
+			//删除redis数据库key是articleList的数据
 			redisTemplate.delete("ArticleList");
+			Article article = JSON.parseObject(condition, Article.class);
+			esRepository.save(article);
 		}else if(value.startsWith("delete")){
-			System.err.println(value);
 			redisTemplate.delete("ArticleList");
+			Integer id = (Integer) JSON.parse(condition);
+			//将es索引库数据删除
+			esRepository.deleteById(id);
+		}else if(value.startsWith("article")){
+			Article article = JSON.parseObject(condition, Article.class);
+			userMapper.addUserArticle(article);
 		}else{
-			System.out.println("获取了消息.....................");
+			System.err.println("获取了消息.....................");
 			Article article = JSON.parseObject(value, Article.class);
 			userMapper.addUserArticle(article);
 		}

@@ -48,17 +48,17 @@ public class Article implements Serializable{
 	// 频道
 	private Integer channelId;
 	//忽略此实体类
-	@JsonIgnore
+//	@JsonIgnore
 	private Channel channel;
 
 	//文章分類
 	private Integer categoryId;
-	@JsonIgnore
+//	@JsonIgnore
 	private Category category;
 	
 	//用戶
 	private Integer userId;
-	@JsonIgnore
+//	@JsonIgnore
 	private User user;
 	
 	//點擊量
@@ -77,10 +77,11 @@ public class Article implements Serializable{
 	//评论数量
 	private int commentCnt;
 	//文章类型
-	@JsonIgnore
+//	@JsonIgnore
 	private ArticleType articleType;
 	
 	//存放文章的所有图片和描述
+	
 	private List<Image> imageList;
 	
 	/**

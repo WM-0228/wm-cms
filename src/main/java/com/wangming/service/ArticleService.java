@@ -125,4 +125,12 @@ public interface ArticleService {
 	 * @return: PageInfo
 	 */
 	PageInfo getImageList(int pageNum);
+
+	/** 
+	 * @Title: test 
+	 * @Description: TODO
+	 * @param articleList
+	 * @return: void
+	 */
+	void test(Article articleList);
 }

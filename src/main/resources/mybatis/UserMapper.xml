@@ -45,7 +45,7 @@
 		UPDATE cms_article SET deleted = 1 where id = ${value}
 	</delete>
 	
-	<insert id="addUserArticle">
+	<insert id="addUserArticle" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO cms_article SET 
 			title = #{title},
 			content = #{content},

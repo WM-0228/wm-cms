@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.wangming.entity.Article;
 
@@ -127,4 +128,24 @@ public interface ArticleMapper {
 	 * @return: List<Article>
 	 */
 	List<Article> getImageList(int pageNum);
+
+	/** 
+	 * @Title: test 
+	 * @Description: 修改点击量
+	 * @param articleList
+	 * @return: void
+	 */
+	@Update("UPDATE cms_article SET hits = ${hits} WHERE id = #{id}")
+	void test(Article articleList);
+	
+	/**
+	 * 
+	 * @Title: findByCategoryId 
+	 * @Description: 获取和频道对应的分类id
+	 * @param channelId
+	 * @return
+	 * @return: int[]
+	 */
+	@Select("SELECT id FROM cms_category WHERE channel_id = #{value}")
+	int[] findByCategoryId(int channelId);
 }

@@ -1,20 +1,21 @@
 /**   
- * Copyright © 2019 公司名. All rights reserved.
  * 
- * @Title: ESUtils.java 
- * @Prject: chengongjun_cms
- * @Package: com.chengongjun.chengongjun_cms.utils 
+ * @Title: Page.java 
+ * @Prject: wangming-cms
+ * @Package: com.wangming.test 
  * @Description: TODO
- * @author: chj   
- * @date: 2019年7月24日 上午10:14:13 
+ * @author: WM  
+ * @date: 2019年12月17日 下午6:57:18 
  * @version: V1.0   
  */
-package com.wangming.utils;
+package com.wangming.test;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -36,16 +37,81 @@ import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 
+import com.github.pagehelper.PageInfo;
 
-/**
- * @ClassName: ESUtils
+/** 
+ * @ClassName: Page 
  * @Description: TODO
- * @author: 
- * @date: 2019年7月24日 上午10:14:13
+ * @author:WM 
+ * @date: 2019年12月17日 下午6:57:18  
  */
-public class HLUtils {
+public class Page {
 
+	
+	private int page;
+	
+	private int rows;
 
+	private Class<?> clazz;
+	
+	
+	/**
+	 * @return the clazz
+	 */
+	public Class<?> getClazz() {
+		return clazz;
+	}
+
+	/**
+	 * @param clazz the clazz to set
+	 */
+	public void setClazz(Class<?> clazz) {
+		this.clazz = clazz;
+	}
+
+	/**
+	 * @return the page
+	 */
+	public int getPage() {
+		return page;
+	}
+
+	/**
+	 * @param page the page to set
+	 */
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	/**
+	 * @return the rows
+	 */
+	public int getRows() {
+		return rows;
+	}
+
+	/**
+	 * @param rows the rows to set
+	 */
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	/** 
+	 * @Title:Page
+	 * @Description:TODO 
+	 * @param page
+	 * @param rows 
+	 */
+	public Page(ElasticsearchTemplate elasticsearchTemplate, Class<?> clazz, Integer page,
+			Integer rows, String fieldNames[],String sortField, String value) {
+		super();
+		this.page = page;
+		this.rows = rows;
+		this.clazz = clazz;
+		selectObjects(elasticsearchTemplate, clazz, page, rows, fieldNames, sortField, value);
+	}
+	
 	/**
 	 * 保存及更新方法
 	 * 
@@ -155,7 +221,7 @@ public class HLUtils {
 										field.setAccessible(true);
 										// 字段名称
 										String fieldName = field.getName();
-										if (!fieldName.equals("serialVersionUID")&&!fieldName.equals("user")&&!fieldName.equals("channel")&&!fieldName.equals("category")&&!fieldName.equals("articleType")&&!fieldName.equals("imageList")) {
+										if (!fieldName.equals("serialVersionUID")&&!fieldName.equals("user")) {
 											HighlightField highlightField = searchHit.getHighlightFields()
 													.get(fieldName);
 											if (highlightField != null) {
@@ -197,9 +263,73 @@ public class HLUtils {
 			query = new NativeSearchQueryBuilder().withPageable(pageable).build();
 			pageInfo = elasticsearchTemplate.queryForPage(query, clazz);
 		}
-
-
 		return pageInfo;
 	}
-
+	
+	
+	public static PageInfo page(HttpServletRequest request, String url, Integer pageSize,List<?> list, Integer listCount, Integer pageNum,Class clazz,Object obj) {
+		// 通过符合要求的总条数和页面显示数来计算总页数
+		int pageCount = listCount/pageSize + (listCount%pageSize == 0 ? 0 : 1);
+		String endstring = "";
+		//获取类属性进行路径拼接
+		if(clazz != null && obj != null){
+			String str = "";
+			try {
+				Field[] declaredFields = clazz.getDeclaredFields();
+				for (Field field : declaredFields) {
+					field.setAccessible(true);
+					Object object = field.get(obj);
+					str += field.getName()+"="+(field.get(obj) == null ? "" : field.get(obj))+"&";
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			endstring = str.substring(0, str.length() - 1);
+			
+		}
+			
+		int prePage = 0;
+		int nextPage = 0;
+		
+		prePage = (pageNum == 1 ? pageNum : pageNum - 1);
+		nextPage = (pageNum == pageCount ? pageNum : pageNum + 1);
+		
+		
+		PageInfo page = new PageInfo(list);
+		page.setPages(pageCount);
+		page.setPrePage(prePage);
+		page.setNextPage(nextPage);
+		page.setTotal(listCount);
+		page.setPageSize(pageSize);
+		
+		//本来想法是写一个flag判断这个循环的对象只要他不为空在进行一个判断但是没有想出来只能等出现新的错误再继续更新
+		
+		//这个方法是不行的   因为是类属性的字符串拼接  所以肯定长度大于0
+//		String flag = substring.length() == 0 ? "?" : "&";
+		
+		//System.out.println("pageCount=="+pageCount);
+		// 判断url上是否有?号，如果有，后面通过&符号进行连接，否则通过?进行连接
+		String flag = url.indexOf("?") != -1 ? "&" : "?";
+		
+		url += endstring;
+		
+		
+		String pages = "";
+		
+		pages += "<ul class='pagination'>";
+		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+prePage+"'>&laquo;</a></li>";
+		for (int i = pageNum - 2  > 1 ? pageNum - 2 : 1; i <= (pageNum + 2 > pageCount ? pageCount : pageNum + 2); i++) {
+			if(pageNum != i){
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+			}else{
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+			}
+		}
+		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+nextPage+"'>&raquo;</a></li></ul>";
+		
+		request.setAttribute("page",pages);
+		return page;
+	}
+			
 }

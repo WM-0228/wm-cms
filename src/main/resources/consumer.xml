@@ -18,6 +18,9 @@
 				<entry key="enable.auto.commit" value="true" />
 				<!--网络请求的socket超时时间。实际超时时间由max.fetch.wait + socket.timeout.ms 确定 -->
 				<entry key="session.timeout.ms" value="15000 " />
+				<!-- 从何处开始消费: latest 表示消费最新的消息  earliest 从头开始消费,none 表示抛出异常  默认latest -->
+				<entry key="auto.offset.reset" value="earliest"/>
+
 
 				<entry key="key.deserializer"
 					value="org.apache.kafka.common.serialization.StringDeserializer" />

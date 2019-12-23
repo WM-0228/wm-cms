@@ -1,4 +1,4 @@
-package com.wangming.utils;
+package com.wangming.util;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -27,9 +27,10 @@ public final class PageUtil {
 	 * @param listCount 一共有多少条数据
 	 * @param page     当前页码
 	 */
-	public static PageInfo page(HttpServletRequest request, String url, Integer pageSize,List<?> list, Integer listCount, Integer pageNum,Class clazz,Object obj) {
+	public static void page(HttpServletRequest request, String url, Integer pageSize,Integer count, Integer listCount, Integer pageNum,Class clazz,Object obj) {
 		// 通过符合要求的总条数和页面显示数来计算总页数
 		int pageCount = listCount/pageSize + (listCount%pageSize == 0 ? 0 : 1);
+		
 		String endstring = "";
 		//获取类属性进行路径拼接
 		if(clazz != null && obj != null){
@@ -48,20 +49,24 @@ public final class PageUtil {
 			endstring = str.substring(0, str.length() - 1);
 			
 		}
-			
+		
+		//上一页
+		String prev = "";
+		//下一页
+		String next = "";
+		
+		
 		int prePage = 0;
 		int nextPage = 0;
 		
 		prePage = (pageNum == 1 ? pageNum : pageNum - 1);
 		nextPage = (pageNum == pageCount ? pageNum : pageNum + 1);
 		
-		//没用
-		/*PageInfo page = new PageInfo(list);
+		
+		/*PageInfo page = new PageInfo();
 		page.setPages(pageCount);
 		page.setPrePage(prePage);
-		page.setNextPage(nextPage);
-		page.setTotal(listCount);
-		page.setPageSize(pageSize);*/
+		page.setNextPage(nextPage);*/
 		
 		//本来想法是写一个flag判断这个循环的对象只要他不为空在进行一个判断但是没有想出来只能等出现新的错误再继续更新
 		
@@ -79,16 +84,16 @@ public final class PageUtil {
 		
 		pages += "<ul class='pagination'>";
 		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+prePage+"'>&laquo;</a></li>";
-		for (int i = pageNum - 2  > 1 ? pageNum - 2 : 1; i <= (pageNum + 2 > pageCount ? pageCount : pageNum + 2); i++) {
+		for (int i = pageNum - 2  > 1 ? pageNum - 2 : 1; i < (pageNum + 2 > pageCount ? pageCount : pageNum + 2); i++) {
 			if(pageNum != i){
-				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>${index.index}</a></li>";
 			}else{
-				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>"+i+"</a></li>";
+				pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+i+"'>${index.index}</a></li>";
 			}
 		}
 		pages += "<li><a href='"+request.getContextPath()+url+flag+"pageNum="+nextPage+"'>&raquo;</a></li></ul>";
 		
 		request.setAttribute("page",pages);
-		return new PageInfo(list);
+	
 	}
 }

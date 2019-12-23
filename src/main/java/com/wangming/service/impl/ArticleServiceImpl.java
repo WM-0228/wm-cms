@@ -115,4 +115,10 @@ public class ArticleServiceImpl implements ArticleService {
 		return new PageInfo(articleMapper.getImageList(pageNum));
 	}
 
+	@Override
+	public void test(Article articleList) {
+		// TODO Auto-generated method stub
+		articleMapper.test(articleList);
+	}
+
 }
